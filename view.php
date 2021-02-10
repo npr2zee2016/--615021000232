@@ -17,16 +17,31 @@
     }
 
     $sql = "SELECT * FROM movies";
+    if(isset($_GET['search'])) {
+        $sql = "SELECT * FROM movies WHERE movie_name LIKE '%{$_GET['search']}%'";
+    }
     $result = $dbcon->query($sql);
 
     if ($result->num_rows > 0) {
-        echo    "<div class=\"col-lg-12 mb-4\">
-                    <div class=\"d-flex\">
-                        <div class=\"ml-auto\">
-                            <a href=\"?page=insert\" class=\"btn btn-info br-10\"> <span class=\"fas fa-plus\"></span> เพิ่มภาพยนต์</a>
+?>
+        <div class="col-lg-12 mb-4">
+            <div class="d-flex">
+                <div>
+                    <form action="" method="GET">
+                        <div class="input-group">
+                            <input type="text" class="form-control border-0 shadow-sm" name="search" placeholder="ช่องค้นหา...">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-info">ค้นหา</button>
+                            </div>
                         </div>
-                    </div>
-                </div>";
+                    </form>
+                </div>
+                <div class="ml-auto">
+                    <a href="?page=insert" class="btn btn-info br-10"> <span class="fas fa-plus"></span> เพิ่มภาพยนต์</a>
+                </div>
+            </div>
+        </div>
+<?php
         while($row = $result->fetch_assoc()) {
 ?>
 
@@ -58,7 +73,10 @@
         <div class="card card-body shadow-sm border-0 br-10 text-center py-5">
             <h3 class="text-danger mb-5"><span class="far fa-times-circle"></span> ไม่พบข้อมูล</h3>
             <p>ไม่พบข้อมูลภาพยนต์ในระบบ, หากท่านต้องการเพิ่มภาพยนต์สามารถ "<b class="text-danger">คลิก</b>" ที่ปุ่มด้านล่างเพื่อเพิ่มได้เลย :)</p>
-            <div class="col-lg-12 mt-4"><a href="?page=insert" class="btn btn-info br-10"><span class="fas fa-plus"></span> เพิ่มภาพยนต์</a></div>
+            <div class="col-lg-12 mt-4">
+                <a href="?page=insert" class="btn btn-info br-10"><span class="fas fa-plus"></span> เพิ่มภาพยนต์</a>
+                <a href="." class="btn btn-danger br-10"><span class="fas fa-angle-left"></span> ย้อนกลับ</a>
+            </div>
         </div>
     </div>
 <?php
