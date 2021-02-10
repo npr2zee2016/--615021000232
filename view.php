@@ -20,6 +20,23 @@
     if(isset($_GET['search'])) {
         $sql = "SELECT * FROM movies WHERE movie_name LIKE '%{$_GET['search']}%'";
     }
+    if(isset($_GET['delete'])) {
+        $sqls = "DELETE FROM movies WHERE movie_id = '{$_GET['id']}'";
+
+        if (mysqli_query($dbcon, $sqls)) {
+?>
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'สำเร็จ!',
+        text: "ลบภาพยนต์สำเร็จเเล้ว :)"
+    })
+</script>
+<?php
+        } else {
+            echo "Error deleting record: " . mysqli_error($dbcon);
+        }
+    }
     $result = $dbcon->query($sql);
 
     if ($result->num_rows > 0) {
@@ -37,7 +54,7 @@
                     </form>
                 </div>
                 <div class="ml-auto">
-                    <a href="?page=insert" class="btn btn-info br-10"> <span class="fas fa-plus"></span> เพิ่มภาพยนต์</a>
+                    <a href="?page=insert" class="btn btn-info btn-sm br-10"> <span class="fas fa-plus"></span> เพิ่มภาพยนต์</a>
                 </div>
             </div>
         </div>
@@ -45,7 +62,7 @@
         while($row = $result->fetch_assoc()) {
 ?>
 
-            <div class="col-lg-4">
+            <div class="col-lg-4 mb-4">
                 <div class="card shadow-sm border-0 br-10">
                     <div class="card-body">
                         <div class="d-flex">
@@ -58,7 +75,7 @@
                             </button>
                             <div class="dropdown-menu border-0 br-10 shadow" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="?page=update&id=<?php echo $row['movie_id']; ?>">แก้ไข</a>
-                            <a class="dropdown-item" href="#">ลบ</a>
+                            <a class="dropdown-item" href="?delete&id=<?php echo $row['movie_id']; ?>">ลบ</a>
                             </div>
                         </div>
                     </div>
